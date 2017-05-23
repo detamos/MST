@@ -22,22 +22,36 @@ int main()
 	int q;
 	cin>>q;
 	LinearList<Edge> mst = graph.kruskalMST();
+	int parent[mst.size()];
+	for(int i=0;i<mst.size();i++)
+	{
+		int u = mst[i].src;
+		int v = mst[i].des;
+		if(parent[u] == -1)
+			parent[u] = v;
+		else
+			parent[v] = u;
+		cout<<u<<" "<<v<<endl;
+	}
+	cout<<endl;
+	int ctr = 0;
 	while(q--)
 	{
 		cin>>x>>y;
-		bool flag = false;
-		for(int i=0;i<mst.size();i++)
+		cout<<x<<" "<<y<<endl;
+		if(x >= n || y >= n)
 		{
-			if((mst[i].src == x && mst[i].des == y)
-				|| (mst[i].src == y && mst[i].des == x))
-			{
-				cout<<"yes\n";
-				flag = true;
-				break;
-			}
+			cout<<"no\n";
+			continue;
 		}
-		if(flag == false)
+		if(parent[x] == y || parent[y] == x)
+		{
+			cout<<"yes\n";
+			ctr++;
+		}
+		else
 			cout<<"no\n";
 	}
+	cout<<ctr<<endl;
 	return 0;
 }
