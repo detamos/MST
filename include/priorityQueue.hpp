@@ -8,6 +8,7 @@
 
 #include "seqLinearList.hpp"
 #include <limits.h>
+#include <assert.h>
 
 using namespace cs202;
 

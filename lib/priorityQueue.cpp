@@ -37,39 +37,6 @@ MinPriorityQueue<T> :: MinPriorityQueue(LinearList<T> &v)
 	this->build_heap(v);
 }
 
-template<class T>
-void MinPriorityQueue<T> :: heapify(const size_t &pos)
-{
-	int l = this->left(pos),r = this->right(pos);
-	int swap_pos = pos;
-	if(l < this->heap_size_ && heap[l] < heap[swap_pos])
-		swap_pos = l;
-	if(r < this->heap_size_ && heap[r] < heap[swap_pos])
-		swap_pos = r;
-	if(swap_pos == pos)
-		return;
-	swap(heap[pos],heap[swap_pos]);
-	heapify(swap_pos);
-}
-
-template<class T>
-void MinPriorityQueue<T> :: insert(const T &a)
-{
-	if(this->heap_size_ == this->heap.capacity())
-	{
-		cerr<<"OVERFLOW priorityQueue :: insert()\n";
-		return ;
-	}
-	this->heap_size_++;
-	int size = this->heap_size_-1;
-	this->heap.push_back(a);
-
-	while(size != 0 && this->heap[size] < this->heap[parent(size)])
-	{
-		swap(this->heap[size],this->heap[parent(size)]);
-		size = parent(size);
-	}
-}
 
 template<class T>
 void MinPriorityQueue<T> :: heap_decrease_key(const size_t &pos,const T &key)
@@ -94,6 +61,26 @@ inline T MinPriorityQueue<T> :: minimum()
 }
 
 template<class T>
+void MinPriorityQueue<T> :: insert(const T &a)
+{
+	if(this->heap_size_ == this->heap.capacity())
+	{
+		cerr<<"OVERFLOW priorityQueue :: insert()\n";
+		return ;
+	}
+	this->heap_size_++;
+	int size = this->heap_size_-1;
+	this->heap.push_back(a);
+
+	while(size != 0 && this->heap[size] < this->heap[parent(size)])
+	{
+		swap(this->heap[size],this->heap[parent(size)]);
+		size = parent(size);
+	}
+}
+
+
+template<class T>
 T MinPriorityQueue<T> :: extract_min()
 {
 	T ret = this->heap[0];
@@ -101,6 +88,21 @@ T MinPriorityQueue<T> :: extract_min()
 	this->heap_size_--;
 	this->heapify(0);
 	return ret;
+}
+
+template<class T>
+void MinPriorityQueue<T> :: heapify(const size_t &pos)
+{
+	int l = this->left(pos),r = this->right(pos);
+	int swap_pos = pos;
+	if(l < this->heap_size_ && heap[l] < heap[swap_pos])
+		swap_pos = l;
+	if(r < this->heap_size_ && heap[r] < heap[swap_pos])
+		swap_pos = r;
+	if(swap_pos == pos)
+		return;
+	swap(heap[pos],heap[swap_pos]);
+	heapify(swap_pos);
 }
 
 template<class T>

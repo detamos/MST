@@ -240,39 +240,50 @@ LinearList<Edge> AbstractGraph :: PrimsMST()
 	LinearList<Edge> ret;
 	Edge edges;
 
-	MinPriorityQueue<pair<int,int> > queue;
-	queue.insert(make_pair(0,0));
+	MinPriorityQueue<Pair<int,int> > queue;
 
-	LinearList<int> s;
-	s.resize(this->vertices_);
-	for(int i=0;i<this->vertices_;i++)
+	queue.insert(makepair(0,0));
+	int V = this->vertices_;
+	int key[V];
+	Pair<int,int> parent[V];
+	bool vis[V];
+	for(int i=0;i<V;i++)
 	{
-		s[i] = 0;
+		key[i] = INT_MAX;
+		parent[i].first = -1;
+		vis[i] = false;
 	}
+	key[0] = 0;
 
 	while(!queue.empty())
 	{
-		pair<int,int> temp = queue.extract_min();
-		int u = temp.second;
-		if(s[u] == 1)
-			continue;
-		s[u] = 1;
+		Pair<int,int> temp;
+		temp  = queue.extract_min();
+		int u = temp.first;
+		vis[u] = true;
 		Node<pair<int,int> > *trav = this->AdjList.getstart(u);
 		while(trav)
 		{
 			int v = trav->data.first;
-			if(s[v] == 0)
+			int w = trav->data.second;
+			if(vis[v] == false && key[v] > w)
 			{
-				temp.first = trav->data.second;
-				temp.second = v;
-				queue.insert(temp);
-				edges.src = u,edges.des = v,edges.weight = temp.first;
-				ret.push_back(edges);
+				key[v] = w;
+				queue.insert(makepair(v,key[v]));
+				parent[v].first = u;
+				parent[v].second = w;
 			}
 			trav = trav->next;
 		}
 	}
+	
+	for(int i=0;i<V;i++)
+	{
+		if(parent[i].first == -1)
+			continue;
+		edges.des = i,edges.src = parent[i].first,edges.weight = parent[i].second;
+		ret.push_back(edges);
+	}
 
-	ret = KruskalMST();
 	return ret;
 }

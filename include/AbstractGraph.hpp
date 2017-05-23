@@ -61,7 +61,7 @@ namespace cs202
     }
     bool operator > (const Edge &e)
     {
-      return (this->weight < e.weight);
+      return (this->weight > e.weight);
     }
     friend ostream &operator << (ostream &output,const Edge &e)
     {
@@ -69,6 +69,41 @@ namespace cs202
       return output;
     }
   };
+
+  template<typename T,typename F>
+  class Pair
+  {
+  public:
+    T first;
+    F second;
+    bool operator < (const Pair & temp)
+    {
+      return (this->second < temp.second);
+    }
+    bool operator > (const Pair &temp)
+    {
+      return (this->second > temp.second);
+    }
+    Pair& operator = (const Pair &temp)
+    {
+      this->first = temp.first;
+      this->second = temp.second;
+    }
+    friend ostream &operator << (ostream &output,const Pair &temp)
+    {
+      output<<"("<<temp.first<<","<<temp.second<<")";
+      return output;
+    }
+  };
+
+  template<typename T,typename F>
+  Pair<T,F> makepair(const T &t,const F &f)
+  {
+    Pair<T,F> temp;
+    temp.first = t;
+    temp.second = f;
+    return temp;
+  }
 
   class AbstractGraph 
   {
